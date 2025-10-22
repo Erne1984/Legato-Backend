@@ -1,4 +1,4 @@
-package com.floriano.login_system_backend_maven.infra.security;
+package com.floriano.legato_api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

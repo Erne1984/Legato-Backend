@@ -50,12 +50,12 @@ usando **Spring Boot 3**, **Spring Security** e **JWT**.
 ## Endpoints 
 
 
-| Método | Caminho | Acesso | Descrição | 
-|--------|:-------:|--------|-----------|
-| POST   |/auth/register|Público|Cadastro de novo usuário|
-| POST   |/auth/login  |Público|Login e obtenção do token| 
-| POST   |/products     |ADMIN only|Exmplo de rota protegida|
-| GET/   |qualquer outro|Autenticado|Protegido por padão|
+| Método |    Caminho     | Acesso      | Descrição                 | 
+|--------|:--------------:|-------------|---------------------------|
+| POST   | /auth/register | Público     | Cadastro de novo usuário  |
+| POST   |  /auth/login   | Público     | Login e obtenção do token | 
+| POST   |   /products    | ADMIN only  | Exmplo de rota protegida  |
+| GET/   | qualquer outro | Autenticado | Protegido por padão       |
 
 
 

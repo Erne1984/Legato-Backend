@@ -1,9 +1,9 @@
-package com.floriano.login_system_backend_maven.infra.security;
+package com.floriano.legato_api.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.floriano.login_system_backend_maven.domain.user.User;
+import com.floriano.legato_api.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

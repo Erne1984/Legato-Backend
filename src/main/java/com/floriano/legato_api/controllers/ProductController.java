@@ -1,4 +1,4 @@
-package com.floriano.login_system_backend_maven.controllers;
+package com.floriano.legato_api.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

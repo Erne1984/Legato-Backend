@@ -1,16 +1,15 @@
-package com.floriano.login_system_backend_maven.controllers;
+package com.floriano.legato_api.controllers;
 
-import com.floriano.login_system_backend_maven.domain.user.AutheticationDto;
-import com.floriano.login_system_backend_maven.domain.user.RegisterDto;
-import com.floriano.login_system_backend_maven.domain.user.User;
-import com.floriano.login_system_backend_maven.infra.security.TokenService;
-import com.floriano.login_system_backend_maven.repositories.UserRepository;
+import com.floriano.legato_api.domain.user.AutheticationDto;
+import com.floriano.legato_api.domain.user.RegisterDto;
+import com.floriano.legato_api.domain.user.User;
+import com.floriano.legato_api.infra.security.TokenService;
+import com.floriano.legato_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
