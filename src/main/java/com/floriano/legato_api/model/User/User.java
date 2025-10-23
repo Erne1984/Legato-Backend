@@ -1,4 +1,4 @@
-package com.floriano.legato_api.domain.user;
+package com.floriano.legato_api.model.User;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,13 +26,17 @@ public class User implements UserDetails {
 
     private String password;
 
+    private String username;
+    private String displayName;
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    public User(String email, String password, UserRole role) {
+    public User(String email, String password, UserRole role, String username, String displayName) {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.username = username;
+        this.displayName = displayName;
     }
 
     @Override

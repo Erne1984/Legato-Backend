@@ -1,4 +1,4 @@
-package com.floriano.legato_api.domain.user;
+package com.floriano.legato_api.model.User;
 
 public enum UserRole {
     ADMIN("admin"),

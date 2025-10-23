@@ -1,8 +1,8 @@
 package com.floriano.legato_api.controllers;
 
-import com.floriano.legato_api.domain.user.AutheticationDto;
-import com.floriano.legato_api.domain.user.RegisterDto;
-import com.floriano.legato_api.domain.user.User;
+import com.floriano.legato_api.dto.AuthDTO.AutheticationDto;
+import com.floriano.legato_api.dto.AuthDTO.RegisterDto;
+import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.infra.security.TokenService;
 import com.floriano.legato_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class AuthenticationController {
         if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role());
+        User newUser = new User(data.email(), encryptedPassword, data.role(), data.username(), data.displayName() );
 
         this.userRepository.save(newUser);
 
