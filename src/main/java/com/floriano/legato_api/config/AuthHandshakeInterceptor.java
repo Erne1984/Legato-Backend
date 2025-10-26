@@ -1,43 +1,46 @@
 package com.floriano.legato_api.config;
+
+import com.floriano.legato_api.infra.security.TokenService;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
+@Component
 public class AuthHandshakeInterceptor implements HandshakeInterceptor {
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
-    public boolean beforeHandshake(
-            ServerHttpRequest request,
-            ServerHttpResponse response,
-            WebSocketHandler wsHandler,
-            Map<String, Object> attributes) throws Exception {
+    public boolean beforeHandshake(ServerHttpRequest request,
+                                   ServerHttpResponse response,
+                                   WebSocketHandler wsHandler,
+                                   Map<String, Object> attributes) throws Exception {
 
-        // Extrai o header Authorization
-        var headers = request.getHeaders();
-        var authHeader = headers.getFirst("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("❌ Token ausente");
-            return false; // rejeita handshake
-        }
-
-        String token = authHeader.substring(7);
-
-        // Aqui você validaria o token (ex: JWTUtil.validate(token))
-        boolean valido = validarToken(token);
-
-        if (!valido) {
-            System.out.println("❌ Token inválido");
+        var query = request.getURI().getQuery();
+        if (query == null || !query.contains("token=")) {
+            System.out.println("[WS] Token ausente na query");
             return false;
         }
 
-        // Se quiser, armazene info do usuário
-        attributes.put("user", extrairUsuario(token));
+        var token = query.substring(query.indexOf("token=") + 6);
 
-        return true; // prossegue
+        var subject = tokenService.validateToken(token);
+
+        if (subject == null || subject.isEmpty()) {
+            System.out.println("[WS] Token inválido");
+            return false;
+        }
+
+        attributes.put("userEmail", subject);
+        System.out.println("[WS] Conexão autenticada de: " + subject);
+
+        return true;
     }
 
     @Override
@@ -46,16 +49,5 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
             ServerHttpResponse response,
             WebSocketHandler wsHandler,
             Exception exception) {
-        // nada necessário aqui
-    }
-
-    // Mock de validação só para exemplo
-    private boolean validarToken(String token) {
-        return token.equals("meu-token-valido");
-    }
-
-    private String extrairUsuario(String token) {
-        return "ernesto"; // exemplo
     }
 }
-

@@ -29,6 +29,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers("/ws-chat/**").permitAll() // 🔥 permite o handshake WebSocket
+
                         .requestMatchers((HttpMethod.POST), "/products").hasRole("ADMIN")
                         .requestMatchers((HttpMethod.POST), "/").permitAll()
                         .anyRequest().authenticated())
