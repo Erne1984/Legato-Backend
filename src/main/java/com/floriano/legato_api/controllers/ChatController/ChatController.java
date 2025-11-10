@@ -1,4 +1,4 @@
-package com.floriano.legato_api.controllers.Chat;
+package com.floriano.legato_api.controllers.ChatController;
 
 import com.floriano.legato_api.model.ChatMessage.ChatMessage;
 import com.floriano.legato_api.services.ChatMessageService;
