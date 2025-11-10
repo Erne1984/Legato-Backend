@@ -79,7 +79,6 @@ public class User implements UserDetails {
 
     // SOCIAL
 
-    // Usuários que seguem este usuário
     @ManyToMany
     @JoinTable(
             name = "user_followers",
@@ -88,7 +87,6 @@ public class User implements UserDetails {
     )
     private Set<User> followers = new HashSet<>();
 
-    // Usuários que este usuário segue
     @ManyToMany
     @JoinTable(
             name = "user_following",
@@ -97,7 +95,6 @@ public class User implements UserDetails {
     )
     private Set<User> following = new HashSet<>();
 
-    // Conexões mútuas (amizades aceitas)
     @ManyToMany
     @JoinTable(
             name = "user_connections",
@@ -106,7 +103,6 @@ public class User implements UserDetails {
     )
     private Set<User> connections = new HashSet<>();
 
-    // Usuários bloqueados
     @ManyToMany
     @JoinTable(
             name = "user_blocked",
@@ -115,11 +111,9 @@ public class User implements UserDetails {
     )
     private Set<User> blockedUsers = new HashSet<>();
 
-    // Pedidos de conexão enviados
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConnectionRequest> sentRequests = new ArrayList<>();
 
-    // Pedidos de conexão recebidos
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConnectionRequest> receivedRequests = new ArrayList<>();
 

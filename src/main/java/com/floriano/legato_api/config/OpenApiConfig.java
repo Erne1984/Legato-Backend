@@ -8,15 +8,14 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Philosopher API - OpenAPI Specification",
-                description = "API for querying, creating, and managing philosophers, works, "
+                title = "LEGATO - OpenAPI Specification",
+                description = "API for serving the Legato plataform "
                         + "schools of thought, and quotes. "
                         + "Provides endpoints to explore the history of philosophy and its connections.",
                 version = "1.0",
@@ -41,7 +40,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 )
         },
         tags = {
-                @Tag(name = "Users", description = "Endpoints related to philosophers"),
+                @Tag(name = "Users", description = "Endpoints related to users"),
         },
         externalDocs = @ExternalDocumentation(
                 description = "Full documentation, request/response examples, and usage guides",
