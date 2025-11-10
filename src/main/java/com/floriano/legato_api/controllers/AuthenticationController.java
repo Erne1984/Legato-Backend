@@ -1,7 +1,9 @@
 package com.floriano.legato_api.controllers;
 
+import com.floriano.legato_api.dto.AuthDTO.AuthResponseDTO;
 import com.floriano.legato_api.dto.AuthDTO.AutheticationDto;
 import com.floriano.legato_api.dto.AuthDTO.RegisterDto;
+import com.floriano.legato_api.mapper.UserMapper;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.infra.security.TokenService;
 import com.floriano.legato_api.repositories.UserRepository;
@@ -28,26 +30,35 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AutheticationDto data) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AutheticationDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+        var user = (User) auth.getPrincipal();
+        var token = tokenService.generateToken(user);
 
-        return ResponseEntity.ok(token);
+        var userDTO = UserMapper.toDTO(user);
+        var response = new AuthResponseDTO(token, userDTO);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterDto data) {
-
-        if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterDto data) {
+        if (this.userRepository.findByEmail(data.email()) != null)
+            return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role(), data.username(), data.displayName() );
-
+        User newUser = new User(data.email(), encryptedPassword, data.role(), data.username(), data.displayName());
         this.userRepository.save(newUser);
 
-        return ResponseEntity.ok().build();
+        // Gera token e devolve o mesmo formato que o login
+        var token = tokenService.generateToken(newUser);
+        var userDTO = UserMapper.toDTO(newUser);
+        var response = new AuthResponseDTO(token, userDTO);
+
+        return ResponseEntity.ok(response);
     }
 }

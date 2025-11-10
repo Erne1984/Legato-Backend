@@ -9,29 +9,18 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
-
-    // CAMPOS BÁSICOS
-    private String email;
-    private String username;
-    private String displayName;
+public class UserUpdateDTO {
     private String profilePicture;
     private String profileBanner;
     private List<String> photosCard;
     private String sex;
     private String goal;
 
-    // PREFERÊNCIAS MUSICAIS
     private List<String> instruments;
     private List<String> genres;
 
-    // LOCALIZAÇÃO
     private LocationDTO location;
-
-    // LINKS EXTERNOS
     private ExternalLinksDTO links;
-
-    // CLASSES AUXILIARES
 
     @Data
     @NoArgsConstructor

@@ -12,4 +12,5 @@ public class ExternalLinks {
     private String soundcloud;
     private String instagram;
     private String youtube;
+    private String website;
 }

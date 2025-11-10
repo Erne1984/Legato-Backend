@@ -2,7 +2,7 @@ package com.floriano.legato_api.controllers.ChatController;
 
 import com.floriano.legato_api.model.ChatMessage.ChatMessage;
 import com.floriano.legato_api.services.ChatMessageService;
-import com.floriano.legato_api.services.UserService;
+import com.floriano.legato_api.services.UserSevice.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;

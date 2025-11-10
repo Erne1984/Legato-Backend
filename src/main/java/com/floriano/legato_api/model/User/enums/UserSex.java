@@ -2,7 +2,8 @@ package com.floriano.legato_api.model.User.enums;
 
 public enum UserSex {
     MALE("man"),
-    WOMEN("women");
+    WOMEN("women"),
+    OTHER("other");
 
     private String sex;
 
