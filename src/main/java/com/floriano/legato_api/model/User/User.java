@@ -127,8 +127,6 @@ public class User implements UserDetails {
     @Embedded
     private ExternalLinks links;
 
-    // ======== CONSTRUTOR E USERDETAILS ========
-
     public User(String email, String password, UserRole role, String username, String displayName) {
         this.email = email;
         this.password = password;

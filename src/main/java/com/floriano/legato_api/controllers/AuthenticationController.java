@@ -46,19 +46,26 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterDto data) {
-        if (this.userRepository.findByEmail(data.email()) != null)
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<?> register(@RequestBody RegisterDto data) {
+        try {
+            if (this.userRepository.findByEmail(data.email()).isPresent()) {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role(), data.username(), data.displayName());
-        this.userRepository.save(newUser);
+            String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+            User newUser = new User(data.email(), encryptedPassword, data.role(), data.username(), data.displayName());
 
-        // Gera token e devolve o mesmo formato que o login
-        var token = tokenService.generateToken(newUser);
-        var userDTO = UserMapper.toDTO(newUser);
-        var response = new AuthResponseDTO(token, userDTO);
+            this.userRepository.save(newUser);
 
-        return ResponseEntity.ok(response);
+            var token = tokenService.generateToken(newUser);
+            var userDTO = UserMapper.toDTO(newUser);
+            var response = new AuthResponseDTO(token, userDTO);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
 }

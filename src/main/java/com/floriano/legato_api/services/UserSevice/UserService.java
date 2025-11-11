@@ -33,6 +33,22 @@ public class UserService {
         return userResponseDTOS;
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Usuário com e-mail " + email + " não encontrado"));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("Usuário com username " + username + " não encontrado"));
+    }
+
+
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário com id " + id + " não encontrado"));
+    }
+
     public UserResponseDTO updateUser(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário com id " + id + " não encontrado"));

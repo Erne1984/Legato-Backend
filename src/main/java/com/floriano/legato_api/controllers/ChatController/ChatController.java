@@ -1,8 +1,13 @@
 package com.floriano.legato_api.controllers.ChatController;
 
+import com.floriano.legato_api.dto.ChatDTO.ChatMessageDTO;
+import com.floriano.legato_api.model.Chat.Chat;
 import com.floriano.legato_api.model.ChatMessage.ChatMessage;
+import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.services.ChatMessageService;
+import com.floriano.legato_api.services.ChatService.ChatService;
 import com.floriano.legato_api.services.UserSevice.UserService;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,50 +24,52 @@ public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final ChatService chatService;
     private final ChatMessageService chatMessageService;
     private final UserService userService;
 
     public ChatController(SimpMessagingTemplate messagingTemplate,
+                          ChatService chatService,
                           ChatMessageService chatMessageService,
                           UserService userService) {
         this.messagingTemplate = messagingTemplate;
+        this.chatService = chatService;
         this.chatMessageService = chatMessageService;
         this.userService = userService;
     }
 
+    @Transactional
     @MessageMapping("/sendMessage")
     public void sendPrivateMessage(ChatMessage message,
                                    SimpMessageHeaderAccessor headerAccessor,
                                    Principal principal) {
         try {
-            String fromUser = principal.getName();
-            message.setFromUser(fromUser);
+            String fromEmail = principal.getName();
+            User sender = userService.findByEmail(fromEmail);
+            User receiver = userService.findById(message.getReceiver().getId());
 
-            if (!userService.userExists(fromUser) || !userService.userExists(message.getToUser())) {
-                logger.error("Remetente ({}) ou destinatário ({}) inexistente", fromUser, message.getToUser());
+            if (sender == null || receiver == null) {
+                logger.error("Remetente ({}) ou destinatário inválido.", fromEmail);
                 return;
             }
 
-            if (message.getTimestamp() == null) {
-                message.setTimestamp(LocalDateTime.now());
-            }
+            Chat chat = chatService.getOrCreateChatBetween(sender, receiver);
 
-            if (message.getContent() == null) {
-                message.setContent("");
-            }
+            message.setChat(chat);
+            message.setSender(sender);
+            message.setTimestamp(LocalDateTime.now());
 
             ChatMessage saved = chatMessageService.saveMessage(message);
-            logger.info("Mensagem salva com sucesso com ID {}", saved.getId());
+            chat.addMessage(saved);
+            chatService.saveChat(chat);
 
-            // Enviar para destinatário
-            String recipientDestination = "/user/" + message.getToUser() + "/queue/messages";
-            messagingTemplate.convertAndSend(recipientDestination, saved);
-            logger.info("Mensagem enviada para {}", recipientDestination);
+            logger.info("Mensagem salva no chat {}: {}", chat.getId(), saved.getContent());
 
-            // Enviar cópia para o remetente
-            String senderDestination = "/user/" + fromUser + "/queue/messages";
-            messagingTemplate.convertAndSend(senderDestination, saved);
-            logger.info("Confirmação enviada para {}", senderDestination);
+            messagingTemplate.convertAndSendToUser(
+                    receiver.getEmail(),
+                    "/queue/messages",
+                    ChatMessageDTO.from(saved)
+            );
 
         } catch (Exception e) {
             logger.error("Erro ao enviar mensagem: {}", e.getMessage(), e);
