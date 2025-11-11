@@ -1,5 +1,6 @@
 package com.floriano.legato_api.infra.security;
 
+import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,7 +35,10 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (userOpt.isPresent()) {
                 var user = userOpt.get();
                 var authentication = new UsernamePasswordAuthenticationToken(
-                        user.getEmail(), null, user.getAuthorities());
+                        new UserPrincipal(user),
+                        null,
+                        user.getAuthorities()
+                );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

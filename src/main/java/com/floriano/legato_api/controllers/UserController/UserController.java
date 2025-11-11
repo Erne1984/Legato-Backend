@@ -4,6 +4,7 @@ import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
 import com.floriano.legato_api.model.User.User;
+import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.payload.ApiResponse;
 import com.floriano.legato_api.payload.ResponseFactory;
 import com.floriano.legato_api.services.UserSevice.UserService;
@@ -54,7 +55,11 @@ public class UserController {
                     + "Requer autenticação via Bearer Token. ", security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/follow/{targetId}")
-    public ResponseEntity<UserResponseDTO> followUser(@AuthenticationPrincipal User authenticatedUser, @PathVariable Long targetId) {
+    public ResponseEntity<UserResponseDTO> followUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long targetId
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
         Long followerId = authenticatedUser.getId();
         UserResponseDTO followed = userService.followUser(followerId, targetId);
         return ResponseEntity.ok(followed);
@@ -65,7 +70,8 @@ public class UserController {
             description = "Permite que o usuário autenticado deixe de seguir outro usuário. "
                     + "O ID do seguidor é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
     @PostMapping("/unfollow/{targetId}")
-    public ResponseEntity<UserResponseDTO> unfollowUser(@AuthenticationPrincipal User authenticatedUser, @PathVariable Long targetId) {
+    public ResponseEntity<UserResponseDTO> unfollowUser(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId) {
+        User authenticatedUser = userPrincipal.getUser();
         Long followerId = authenticatedUser.getId();
         UserResponseDTO unfollowed = userService.unfollowUser(followerId, targetId);
         return ResponseEntity.ok(unfollowed);

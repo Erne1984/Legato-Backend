@@ -41,6 +41,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         },
         tags = {
                 @Tag(name = "Users", description = "Endpoints related to users"),
+                @Tag(name = "Notifications", description = "Endpoints related to notifications"),
         },
         externalDocs = @ExternalDocumentation(
                 description = "Full documentation, request/response examples, and usage guides",

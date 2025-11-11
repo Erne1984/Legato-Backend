@@ -6,6 +6,7 @@ import com.floriano.legato_api.dto.AuthDTO.RegisterDto;
 import com.floriano.legato_api.mapper.UserMapper;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.infra.security.TokenService;
+import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,10 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var user = (User) auth.getPrincipal();
-        var token = tokenService.generateToken(user);
+        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
+        User user = userPrincipal.getUser();
 
+        var token = tokenService.generateToken(user);
         var userDTO = UserMapper.toDTO(user);
         var response = new AuthResponseDTO(token, userDTO);
 

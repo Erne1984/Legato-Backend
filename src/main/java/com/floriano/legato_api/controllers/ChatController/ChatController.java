@@ -4,7 +4,7 @@ import com.floriano.legato_api.dto.ChatDTO.ChatMessageDTO;
 import com.floriano.legato_api.model.Chat.Chat;
 import com.floriano.legato_api.model.ChatMessage.ChatMessage;
 import com.floriano.legato_api.model.User.User;
-import com.floriano.legato_api.services.ChatMessageService;
+import com.floriano.legato_api.services.ChatService.ChatMessageService;
 import com.floriano.legato_api.services.ChatService.ChatService;
 import com.floriano.legato_api.services.UserSevice.UserService;
 import jakarta.transaction.Transactional;

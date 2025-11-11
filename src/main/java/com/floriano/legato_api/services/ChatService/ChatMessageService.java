@@ -1,4 +1,4 @@
-package com.floriano.legato_api.services;
+package com.floriano.legato_api.services.ChatService;
 
 import com.floriano.legato_api.model.ChatMessage.ChatMessage;
 import com.floriano.legato_api.repositories.ChatMessageRepository;
