@@ -1,4 +1,4 @@
-package com.floriano.legato_api.model.User.enums;
+package com.floriano.legato_api.model.Connection.enums;
 
 public enum ConnectionStatus {
     PENDING,

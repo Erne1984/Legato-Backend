@@ -20,7 +20,7 @@ public class UserResponseDTO {
 
     private Long id;
 
-    private String email;          // Se for público — caso contrário, remova
+    private String email;
     private String username;
     private String displayName;
 
@@ -42,13 +42,16 @@ public class UserResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // ======== SOCIAL ========
+    // SOCIAL
     private int followersCount;
     private int followingCount;
     private int connectionsCount;
     private int blockedCount;
 
-    // Para evitar loop infinito, retornamos só os IDs ou usernames
+    // CONNECTION REQUESTS
+    private int sentRequestsCount;
+    private int receivedRequestsCount;
+
     private Set<Long> connectionIds;
     private Set<Long> followerIds;
     private Set<Long> followingIds;

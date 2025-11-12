@@ -1,8 +1,10 @@
 package com.floriano.legato_api.controllers.UserController;
 
+import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
+import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.payload.ApiResponse;
@@ -22,7 +24,7 @@ import java.util.List;
 @Tag(name = "Users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -55,9 +57,7 @@ public class UserController {
                     + "Requer autenticação via Bearer Token. ", security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/follow/{targetId}")
-    public ResponseEntity<UserResponseDTO> followUser(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long targetId
+    public ResponseEntity<UserResponseDTO> followUser(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId
     ) {
         User authenticatedUser = userPrincipal.getUser();
         Long followerId = authenticatedUser.getId();
@@ -75,5 +75,79 @@ public class UserController {
         Long followerId = authenticatedUser.getId();
         UserResponseDTO unfollowed = userService.unfollowUser(followerId, targetId);
         return ResponseEntity.ok(unfollowed);
+    }
+
+    @Operation(
+            summary = "Enviar pedido de conexão",
+            description = "Permite que o usuário autenticado envie um pedido de conexão a outro usuário.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PostMapping("/connection-requests/{targetId}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> sendConnectionRequest(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long targetId,
+            @RequestParam(required = false) String message
+    ) {
+        Long senderId = userPrincipal.getUser().getId();
+        UserResponseDTO responseDTO = userService.sendConnectionRequest(senderId, targetId, message);
+        return ResponseFactory.ok("Pedido de conexão enviado com sucesso!", responseDTO);
+    }
+
+    @Operation(
+            summary = "Aceitar pedido de conexão",
+            description = "Permite que o usuário autenticado aceite um pedido de conexão recebido.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PostMapping("/connection-requests/{requestId}/accept")
+    public ResponseEntity<ApiResponse<Void>> acceptConnectionRequest(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long requestId
+    ) {
+        Long receiverId = userPrincipal.getUser().getId();
+        userService.acceptConnectionRequest(receiverId, requestId);
+        return ResponseFactory.ok("Pedido de conexão aceito com sucesso!");
+    }
+
+    @Operation(
+            summary = "Rejeitar pedido de conexão",
+            description = "Permite que o usuário autenticado rejeite um pedido de conexão recebido.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PostMapping("/connection-requests/{requestId}/reject")
+    public ResponseEntity<ApiResponse<Void>> rejectConnectionRequest(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long requestId
+    ) {
+        Long receiverId = userPrincipal.getUser().getId();
+        userService.rejectConnectionRequest(receiverId, requestId);
+        return ResponseFactory.ok("Pedido de conexão rejeitado com sucesso!");
+    }
+
+    @Operation(
+            summary = "Listar pedidos de conexão enviados",
+            description = "Retorna todos os pedidos de conexão enviados pelo usuário autenticado.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @GetMapping("/connection-requests/sent")
+    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listSentRequests(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        List<ConnectionRequestResponseDTO> sent = userService.listSentRequests(userId);
+        return ResponseFactory.ok("Pedidos enviados recuperados com sucesso!", sent);
+    }
+
+    @Operation(
+            summary = "Listar pedidos de conexão recebidos",
+            description = "Retorna todos os pedidos de conexão recebidos pelo usuário autenticado.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @GetMapping("/connection-requests/received")
+    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listReceivedRequests(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        List<ConnectionRequestResponseDTO> received = userService.listReceivedRequests(userId);
+        return ResponseFactory.ok("Pedidos recebidos recuperados com sucesso!", received);
     }
 }

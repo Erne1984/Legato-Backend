@@ -1,17 +1,15 @@
 package com.floriano.legato_api.services.UserSevice;
 
-import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
+import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
-import com.floriano.legato_api.exceptions.UserNotFoundException;
-import com.floriano.legato_api.mapper.UserMapper;
+import com.floriano.legato_api.mapper.connection.ConnectionRequestMapper;
+import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.User;
-import com.floriano.legato_api.repositories.UserRepository;
 import com.floriano.legato_api.services.UserSevice.useCases.*;
-import com.floriano.legato_api.services.UserSevice.utils.UserDeleteHelper;
-import com.floriano.legato_api.services.UserSevice.utils.UserUpdateHelper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +25,13 @@ public class UserService {
     private final DeleteUserService deleteUserService;
     private final FollowUserService followUserService;
     private final UnfollowUserService unfollowUserService;
+    private final SendConnectionRequestService sendConnectionRequestService;
+    private final AcceptConnectionRequestService acceptConnectionRequestService;
+    private final RejectConnectionRequestService rejectConnectionRequestService;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    // CRUD
 
     public List<UserResponseDTO> listAllUsers() {
         return listAllUsersService.execute();
@@ -48,6 +53,8 @@ public class UserService {
         deleteUserService.execute(id);
     }
 
+    // FOLLOW
+
     public UserResponseDTO followUser(Long followerId, Long targetId) {
         return followUserService.execute(followerId, targetId);
     }
@@ -56,4 +63,36 @@ public class UserService {
         return unfollowUserService.execute(followerId, targetId);
     }
 
+    // CONEXÕES
+
+    public UserResponseDTO sendConnectionRequest(Long senderId, Long receiverId, String message) {
+        return sendConnectionRequestService.execute(senderId, receiverId, message);
+    }
+
+    public void acceptConnectionRequest(Long receiverId, Long requestId) {
+        acceptConnectionRequestService.execute(receiverId, requestId);
+    }
+
+    public void rejectConnectionRequest(Long receiverId, Long requestId) {
+        rejectConnectionRequestService.execute(receiverId, requestId);
+    }
+
+    public List<ConnectionRequestResponseDTO> listSentRequests(Long userId) {
+        User user = findById(userId);
+
+        List<ConnectionRequest> connectionRequests =  user.getSentRequests();
+
+        return connectionRequests.stream()
+                .map(ConnectionRequestMapper::toDTO)
+                .toList();
+    }
+
+    public List<ConnectionRequestResponseDTO> listReceivedRequests(Long userId) {
+        User user = findById(userId);
+        List<ConnectionRequest> connectionRequests = user.getReceivedRequests();
+
+        return connectionRequests.stream()
+                .map(ConnectionRequestMapper::toDTO)
+                .toList();
+    }
 }

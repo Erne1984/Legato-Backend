@@ -2,7 +2,7 @@ package com.floriano.legato_api.services.UserSevice.useCases;
 
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.exceptions.UserNotFoundException;
-import com.floriano.legato_api.mapper.UserMapper;
+import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.UserRepository;
 import jakarta.transaction.Transactional;

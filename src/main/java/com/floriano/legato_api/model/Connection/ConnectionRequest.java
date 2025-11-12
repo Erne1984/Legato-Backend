@@ -1,7 +1,7 @@
-package com.floriano.legato_api.model.User.AuxiliaryEntity;
+package com.floriano.legato_api.model.Connection;
 
 import com.floriano.legato_api.model.User.User;
-import com.floriano.legato_api.model.User.enums.ConnectionStatus;
+import com.floriano.legato_api.model.Connection.enums.ConnectionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

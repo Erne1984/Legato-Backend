@@ -3,7 +3,7 @@ package com.floriano.legato_api.controllers;
 import com.floriano.legato_api.dto.AuthDTO.AuthResponseDTO;
 import com.floriano.legato_api.dto.AuthDTO.AutheticationDto;
 import com.floriano.legato_api.dto.AuthDTO.RegisterDto;
-import com.floriano.legato_api.mapper.UserMapper;
+import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.infra.security.TokenService;
 import com.floriano.legato_api.model.User.UserPrincipal;

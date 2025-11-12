@@ -1,8 +1,9 @@
 package com.floriano.legato_api.model.User;
 
+import com.floriano.legato_api.model.Connection.enums.ConnectionStatus;
 import com.floriano.legato_api.model.Post.Post;
 import com.floriano.legato_api.model.User.AuxiliaryEntity.Artist;
-import com.floriano.legato_api.model.User.AuxiliaryEntity.ConnectionRequest;
+import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.AuxiliaryEntity.ExternalLinks;
 import com.floriano.legato_api.model.User.AuxiliaryEntity.Location;
 import com.floriano.legato_api.model.User.enums.*;
@@ -10,7 +11,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.*;

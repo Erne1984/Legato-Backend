@@ -1,4 +1,4 @@
-package com.floriano.legato_api.mapper;
+package com.floriano.legato_api.mapper.user;
 
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.model.User.User;
@@ -41,6 +41,9 @@ public class UserMapper {
         dto.setFollowingCount(user.getFollowing().size());
         dto.setConnectionsCount(user.getConnections().size());
         dto.setBlockedCount(user.getBlockedUsers().size());
+
+        dto.setSentRequestsCount(user.getSentRequests().size());
+        dto.setReceivedRequestsCount(user.getReceivedRequests().size());
 
         dto.setConnectionIds(
                 user.getConnections().stream()
