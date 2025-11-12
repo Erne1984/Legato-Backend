@@ -83,10 +83,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/connection-requests/{targetId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> sendConnectionRequest(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long targetId,
-            @RequestParam(required = false) String message
+    public ResponseEntity<ApiResponse<UserResponseDTO>> sendConnectionRequest(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId, @RequestParam(required = false) String message
     ) {
         Long senderId = userPrincipal.getUser().getId();
         UserResponseDTO responseDTO = userService.sendConnectionRequest(senderId, targetId, message);
@@ -99,9 +96,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/connection-requests/{requestId}/accept")
-    public ResponseEntity<ApiResponse<Void>> acceptConnectionRequest(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long requestId
+    public ResponseEntity<ApiResponse<Void>> acceptConnectionRequest(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long requestId
     ) {
         Long receiverId = userPrincipal.getUser().getId();
         userService.acceptConnectionRequest(receiverId, requestId);
@@ -114,13 +109,25 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/connection-requests/{requestId}/reject")
-    public ResponseEntity<ApiResponse<Void>> rejectConnectionRequest(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long requestId
+    public ResponseEntity<ApiResponse<Void>> rejectConnectionRequest(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long requestId
     ) {
         Long receiverId = userPrincipal.getUser().getId();
         userService.rejectConnectionRequest(receiverId, requestId);
         return ResponseFactory.ok("Pedido de conexão rejeitado com sucesso!");
+    }
+
+    @Operation(
+            summary = "Listar conexões do usuário autenticado",
+            description = "Retorna todos os usuários conectados ao usuário autenticado.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @GetMapping("/connections")
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> listConnections(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        List<UserResponseDTO> connections = userService.listConnections(userId);
+        return ResponseFactory.ok("Conexões recuperadas com sucesso!", connections);
     }
 
     @Operation(
@@ -129,9 +136,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @DeleteMapping("/connections/{targetId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> removeConnection(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long targetId
+    public ResponseEntity<ApiResponse<UserResponseDTO>> removeConnection(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId
     ) {
         Long userId = userPrincipal.getUser().getId();
         UserResponseDTO updated = userService.removeConnection(userId, targetId);
@@ -144,8 +149,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @GetMapping("/connection-requests/sent")
-    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listSentRequests(
-            @AuthenticationPrincipal UserPrincipal userPrincipal
+    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listSentRequests(@AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         Long userId = userPrincipal.getUser().getId();
         List<ConnectionRequestResponseDTO> sent = userService.listSentRequests(userId);
@@ -158,8 +162,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @GetMapping("/connection-requests/received")
-    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listReceivedRequests(
-            @AuthenticationPrincipal UserPrincipal userPrincipal
+    public ResponseEntity<ApiResponse<List<ConnectionRequestResponseDTO>>> listReceivedRequests(@AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         Long userId = userPrincipal.getUser().getId();
         List<ConnectionRequestResponseDTO> received = userService.listReceivedRequests(userId);
@@ -172,9 +175,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/block/{targetId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> blockUser(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long targetId
+    public ResponseEntity<ApiResponse<UserResponseDTO>> blockUser(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId
     ) {
         Long blockerId = userPrincipal.getUser().getId();
         UserResponseDTO blocked = userService.blockUser(blockerId, targetId);
@@ -187,9 +188,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @PostMapping("/unblock/{targetId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> unblockUser(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long targetId
+    public ResponseEntity<ApiResponse<UserResponseDTO>> unblockUser(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long targetId
     ) {
         Long blockerId = userPrincipal.getUser().getId();
         UserResponseDTO unblocked = userService.unblockUser(blockerId, targetId);
@@ -202,8 +201,7 @@ public class UserController {
             security = { @SecurityRequirement(name = "bearerAuth") }
     )
     @GetMapping("/blocked")
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> listBlockedUsers(
-            @AuthenticationPrincipal UserPrincipal userPrincipal
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> listBlockedUsers(@AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         Long userId = userPrincipal.getUser().getId();
         List<UserResponseDTO> blocked = userService.listBlockedUsers(userId);

@@ -32,6 +32,7 @@ public class UserService {
     private final BlockUserService blockUserService;
     private final UnblockUserService unblockUserService;
     private final ListBlockedUsersService listBlockedUsersService;
+    private final ListConnectionsService listConnectionsService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -83,6 +84,10 @@ public class UserService {
 
     public UserResponseDTO removeConnection(Long userId, Long targetId) {
         return removeConnectionService.execute(userId, targetId);
+    }
+
+    public List<UserResponseDTO> listConnections(Long userId) {
+        return listConnectionsService.execute(userId);
     }
 
     public List<ConnectionRequestResponseDTO> listSentRequests(Long userId) {

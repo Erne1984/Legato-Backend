@@ -8,6 +8,7 @@ import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.infra.security.TokenService;
 import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,21 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AutheticationDto data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        boolean emailsExists = userRepository.existsByEmail(data.email());
+        if (!emailsExists) throw new IllegalArgumentException("Email não encontrado!");
         var auth = authenticationManager.authenticate(usernamePassword);
 
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();

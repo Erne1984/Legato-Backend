@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class SendConnectionRequestService {
@@ -29,6 +31,7 @@ public class SendConnectionRequestService {
         boolean alreadyPending = connectionRequestRepository.existsBySenderAndReceiverAndStatusPending(sender, receiver);
         if (alreadyPending)
             throw new IllegalArgumentException("Já existe um pedido pendente entre esses usuários.");
+        if (Objects.equals(sender.getId(), receiverId)) throw new IllegalArgumentException("Usuário não pode enviar conexão para si mesmo.");
 
         ConnectionRequest request = sender.sendConnectionRequest(receiver, message);
         connectionRequestRepository.save(request);

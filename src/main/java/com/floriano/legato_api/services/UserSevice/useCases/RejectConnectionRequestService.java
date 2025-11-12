@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class RejectConnectionRequestService {
@@ -22,6 +24,11 @@ public class RejectConnectionRequestService {
 
         ConnectionRequest request = connectionRequestRepository.findById(requestId)
                 .orElseThrow(() -> new IllegalArgumentException("Pedido não encontrado"));
+
+
+        if(!Objects.equals(receiver.getId(), request.getReceiver().getId())) {
+            throw new IllegalArgumentException("Usuário não tem permissão para rejeitar este pedido de conexão");
+        }
 
         receiver.rejectConnectionRequest(request);
         connectionRequestRepository.save(request);
