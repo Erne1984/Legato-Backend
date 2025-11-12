@@ -28,6 +28,9 @@ public class UserService {
     private final SendConnectionRequestService sendConnectionRequestService;
     private final AcceptConnectionRequestService acceptConnectionRequestService;
     private final RejectConnectionRequestService rejectConnectionRequestService;
+    private final BlockUserService blockUserService;
+    private final UnblockUserService unblockUserService;
+    private final ListBlockedUsersService listBlockedUsersService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -94,5 +97,19 @@ public class UserService {
         return connectionRequests.stream()
                 .map(ConnectionRequestMapper::toDTO)
                 .toList();
+    }
+
+    // BLOCK
+
+    public UserResponseDTO blockUser(Long blockerId, Long targetId) {
+        return blockUserService.execute(blockerId, targetId);
+    }
+
+    public UserResponseDTO unblockUser(Long blockerId, Long targetId) {
+        return unblockUserService.execute(blockerId, targetId);
+    }
+
+    public List<UserResponseDTO> listBlockedUsers(Long userId) {
+        return listBlockedUsersService.execute(userId);
     }
 }

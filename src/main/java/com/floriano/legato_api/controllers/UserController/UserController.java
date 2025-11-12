@@ -150,4 +150,48 @@ public class UserController {
         List<ConnectionRequestResponseDTO> received = userService.listReceivedRequests(userId);
         return ResponseFactory.ok("Pedidos recebidos recuperados com sucesso!", received);
     }
+
+    @Operation(
+            summary = "Bloquear um usuário",
+            description = "Permite que o usuário autenticado bloqueie outro usuário.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PostMapping("/block/{targetId}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> blockUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long targetId
+    ) {
+        Long blockerId = userPrincipal.getUser().getId();
+        UserResponseDTO blocked = userService.blockUser(blockerId, targetId);
+        return ResponseFactory.ok("Usuário bloqueado com sucesso!", blocked);
+    }
+
+    @Operation(
+            summary = "Desbloquear um usuário",
+            description = "Permite que o usuário autenticado desbloqueie outro usuário.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PostMapping("/unblock/{targetId}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> unblockUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long targetId
+    ) {
+        Long blockerId = userPrincipal.getUser().getId();
+        UserResponseDTO unblocked = userService.unblockUser(blockerId, targetId);
+        return ResponseFactory.ok("Usuário desbloqueado com sucesso!", unblocked);
+    }
+
+    @Operation(
+            summary = "Listar usuários bloqueados",
+            description = "Retorna todos os usuários bloqueados pelo usuário autenticado.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @GetMapping("/blocked")
+    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> listBlockedUsers(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        List<UserResponseDTO> blocked = userService.listBlockedUsers(userId);
+        return ResponseFactory.ok("Usuários bloqueados recuperados com sucesso!", blocked);
+    }
 }
