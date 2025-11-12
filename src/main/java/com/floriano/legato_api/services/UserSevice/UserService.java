@@ -28,6 +28,7 @@ public class UserService {
     private final SendConnectionRequestService sendConnectionRequestService;
     private final AcceptConnectionRequestService acceptConnectionRequestService;
     private final RejectConnectionRequestService rejectConnectionRequestService;
+    private final RemoveConnectionService removeConnectionService;
     private final BlockUserService blockUserService;
     private final UnblockUserService unblockUserService;
     private final ListBlockedUsersService listBlockedUsersService;
@@ -78,6 +79,10 @@ public class UserService {
 
     public void rejectConnectionRequest(Long receiverId, Long requestId) {
         rejectConnectionRequestService.execute(receiverId, requestId);
+    }
+
+    public UserResponseDTO removeConnection(Long userId, Long targetId) {
+        return removeConnectionService.execute(userId, targetId);
     }
 
     public List<ConnectionRequestResponseDTO> listSentRequests(Long userId) {

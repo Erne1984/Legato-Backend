@@ -124,6 +124,21 @@ public class UserController {
     }
 
     @Operation(
+            summary = "Remover conexão existente",
+            description = "Permite que o usuário autenticado remova uma conexão já existente entre dois usuários.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @DeleteMapping("/connections/{targetId}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> removeConnection(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long targetId
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        UserResponseDTO updated = userService.removeConnection(userId, targetId);
+        return ResponseFactory.ok("Conexão removida com sucesso!", updated);
+    }
+
+    @Operation(
             summary = "Listar pedidos de conexão enviados",
             description = "Retorna todos os pedidos de conexão enviados pelo usuário autenticado.",
             security = { @SecurityRequirement(name = "bearerAuth") }
