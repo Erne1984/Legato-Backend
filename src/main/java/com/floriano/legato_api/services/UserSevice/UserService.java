@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class UserService {
     private final UnblockUserService unblockUserService;
     private final ListBlockedUsersService listBlockedUsersService;
     private final ListConnectionsService listConnectionsService;
+    private final UpdateUserImageService UpdateUserImageService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -56,6 +58,10 @@ public class UserService {
 
     public void deleteUser(Long id) {
         deleteUserService.execute(id);
+    }
+
+    public UserResponseDTO updateImg(Long id, MultipartFile file, String imageType) {
+        return UpdateUserImageService.execute(id, file, imageType);
     }
 
     // FOLLOW

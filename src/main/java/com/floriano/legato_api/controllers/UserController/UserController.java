@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -206,5 +207,27 @@ public class UserController {
         Long userId = userPrincipal.getUser().getId();
         List<UserResponseDTO> blocked = userService.listBlockedUsers(userId);
         return ResponseFactory.ok("Usuários bloqueados recuperados com sucesso!", blocked);
+    }
+
+    @Operation(
+            summary = "Upload de imagem do usuário",
+            description = """
+                Permite que o usuário autenticado envie uma imagem para ser usada como **foto de perfil** ou **banner**.
+                <br><br>
+                Parâmetros aceitos:
+                - `type`: tipo da imagem (`profile`, `banner`, `card`)
+                - `file`: arquivo de imagem no formato `multipart/form-data`
+                """,
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @PutMapping("/upload-image")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> uploadUserImage(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam("type") String type,
+            @RequestParam("file") MultipartFile file
+    ) {
+        Long userId = userPrincipal.getUser().getId();
+        UserResponseDTO responseDTO = userService.updateImg(userId, file, type);
+        return ResponseFactory.ok("Usuário atualizado com sucesso!", responseDTO);
     }
 }
