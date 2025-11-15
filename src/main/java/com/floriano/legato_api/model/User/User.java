@@ -1,5 +1,6 @@
 package com.floriano.legato_api.model.User;
 
+import com.floriano.legato_api.model.Colaboration.Colaboration;
 import com.floriano.legato_api.model.Connection.enums.ConnectionStatus;
 import com.floriano.legato_api.model.Post.Post;
 import com.floriano.legato_api.model.User.AuxiliaryEntity.Artist;
@@ -116,6 +117,9 @@ public class User {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ConnectionRequest> receivedRequests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Colaboration> colaborations = new ArrayList<>();
 
     // METADADOS
 
