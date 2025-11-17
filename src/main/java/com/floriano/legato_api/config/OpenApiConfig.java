@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         servers = {
                 @Server(
                         description = "Local Environment",
-                        url = "http://localhost:8085/"
+                        url = "http://localhost:8080/"
                 ),
                 @Server(
                         description = "Production Environment",

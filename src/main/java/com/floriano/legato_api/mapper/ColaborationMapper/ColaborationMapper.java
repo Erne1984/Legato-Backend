@@ -8,14 +8,15 @@ import com.floriano.legato_api.model.Colaboration.Colaboration;
 public class ColaborationMapper {
 
     public static Colaboration toEntity(ColaborationRequestDTO dto) {
+
         Colaboration colab = new Colaboration();
+
         colab.setTitle(dto.title());
         colab.setRoyalties(dto.royalties());
-        colab.setGenres(
-                dto.genres().stream().map(Enum::name).toList()
-        );
-        colab.setRemote(dto.remote());
+        colab.setGenres(dto.genres());
+        colab.setRemote(Boolean.TRUE.equals(dto.remote()));
         colab.setDeadline(dto.deadline());
+
         return colab;
     }
 

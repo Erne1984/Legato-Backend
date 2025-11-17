@@ -2,7 +2,7 @@ package com.floriano.legato_api.controllers.ColaborationController;
 
 import com.floriano.legato_api.dto.ColaborationDTO.ColaborationRequestDTO;
 import com.floriano.legato_api.dto.ColaborationDTO.ColaborationResponseDTO;
-import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
+import com.floriano.legato_api.dto.ColaborationDTO.ColaborationUpdateDTO;
 import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.payload.ApiResponse;
 import com.floriano.legato_api.payload.ResponseFactory;
@@ -14,10 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("colab")
@@ -31,11 +29,45 @@ public class ColaborationController {
             summary = "Criar colaboração",
             description = "Permite que o usuário autenticado crie uma colaboração. "
                     + "O ID do criador é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
-    @PostMapping(value = "/colaborations", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<ColaborationResponseDTO>> createColaboration(@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute ColaborationRequestDTO dto) {
+    @PostMapping(value = "/colaborations")
+    public ResponseEntity<ApiResponse<ColaborationResponseDTO>> createColaboration(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                                                   @RequestBody ColaborationRequestDTO dto) {
         Long userId = userPrincipal.getUser().getId();
         ColaborationResponseDTO responseDTO = colaborationService.createColaboration(userId, dto);
 
         return ResponseFactory.ok("Colaboração criada com sucesso!", responseDTO);
+    }
+
+    @PutMapping("/{id}/upload-image")
+    public ResponseEntity<ApiResponse<ColaborationResponseDTO>> uploadImage(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file
+    ) {
+        var response = colaborationService.updateColaborationimage(id, file);
+        return ResponseFactory.ok("Imagem atualizada!", response);
+    }
+
+
+    @Operation(
+            summary = "Atualizar colaboração",
+            description = "Permite que o usuário autenticado atualize uma colaboração. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse<ColaborationResponseDTO>> updateColaboration(@PathVariable Long id,
+                                                                                   @RequestBody ColaborationUpdateDTO dto) {
+        ColaborationResponseDTO responseDTO = colaborationService.updateColaboration(id, dto);
+
+        return ResponseFactory.ok("Colaboração atualizda com sucesso!", responseDTO);
+    }
+
+    @Operation(
+            summary = "Deletar colaboração",
+            description = "Permite que o usuário autenticado delete uma colaboração. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<ApiResponse<Void>> DeleteColaboration(@PathVariable Long id) {
+        colaborationService.deleteColaboration(id);
+
+        return ResponseFactory.ok("Colaboração deletada com sucesso!");
     }
 }

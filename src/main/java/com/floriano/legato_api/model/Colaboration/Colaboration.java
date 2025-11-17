@@ -1,6 +1,7 @@
 package com.floriano.legato_api.model.Colaboration;
 
 import com.floriano.legato_api.model.User.User;
+import com.floriano.legato_api.model.User.enums.Genre;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,9 +26,10 @@ public class Colaboration {
     private String royalties;
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     @CollectionTable(name = "colaboration_genres", joinColumns = @JoinColumn(name = "colaboration_id"))
     @Column(name = "genre")
-    private List<String> genres;
+    private List<Genre> genres;
 
     private boolean remote;
 
