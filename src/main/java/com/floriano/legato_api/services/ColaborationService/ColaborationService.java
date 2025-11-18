@@ -21,10 +21,10 @@ public class ColaborationService {
     private final FindColaborationByIdService findColaborationByIdService;
     private final UploadColaborationImageService uploadColaborationImageService;
     private final ListByUserColaborationService listByUserColaboration;
-    private final ListAllColaborations listAllColaborations;
+    private final ListAllColaborationsService listAllColaborationsService;
 
     public List<ColaborationResponseDTO> listColaborations() {
-        return listAllColaborations.execute();
+        return listAllColaborationsService.execute();
     }
 
     public ColaborationResponseDTO createColaboration(Long userId, ColaborationRequestDTO dto) {

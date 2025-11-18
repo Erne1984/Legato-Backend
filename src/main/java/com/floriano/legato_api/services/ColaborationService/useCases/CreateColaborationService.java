@@ -7,7 +7,6 @@ import com.floriano.legato_api.model.Colaboration.Colaboration;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.ColaborationRepository;
 import com.floriano.legato_api.repositories.UserRepository;
-import com.floriano.legato_api.services.CloudinaryService.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

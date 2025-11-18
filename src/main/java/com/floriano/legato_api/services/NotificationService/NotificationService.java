@@ -1,8 +1,14 @@
 package com.floriano.legato_api.services.NotificationService;
 
+import com.floriano.legato_api.dto.NotificationDTO.NotificationRequestDTO;
+import com.floriano.legato_api.dto.NotificationDTO.NotificationResponseDTO;
 import com.floriano.legato_api.model.Notification.Notification;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.NotificationRepository;
+import com.floriano.legato_api.services.ColaborationService.useCases.CreateColaborationService;
+import com.floriano.legato_api.services.NotificationService.userCases.CreateNotificationService;
+import com.floriano.legato_api.services.NotificationService.userCases.ListNotificationsByRecipientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,28 +16,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-
-    public NotificationService(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
-    }
+    private final CreateNotificationService createNotificationService;
+    private final ListNotificationsByRecipientService listNotificationsByRecipientService;
 
     @Transactional(readOnly = true)
-    public List<Notification> findAllByRecipient(User recipient) {
-        return notificationRepository.findAllByRecipientOrderByCreatedAtDesc(recipient);
+    public List<NotificationResponseDTO> findAllByRecipient(Long recipientId) {
+        return listNotificationsByRecipientService.execute(recipientId);
     }
 
     @Transactional
-    public Notification createNotification(User sender, User recipient, String message, String type) {
-        Notification notification = new Notification();
-        notification.setSender(sender);
-        notification.setRecipient(recipient);
-        notification.setMessage(message);
-        notification.setType(type);
-        notification.setRead(false);
-        notification.setCreatedAt(LocalDateTime.now());
-        return notificationRepository.save(notification);
+    public NotificationResponseDTO createNotification(Long idUser, NotificationRequestDTO dto) {
+        return createNotificationService.execute(idUser, dto);
     }
 }
