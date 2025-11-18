@@ -9,4 +9,5 @@ import java.util.List;
 public interface ColaborationRepository extends JpaRepository<Colaboration, Long> {
 
     List<Colaboration> findByUser(User user);
+
 }

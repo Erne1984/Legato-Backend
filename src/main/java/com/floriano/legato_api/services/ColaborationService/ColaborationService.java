@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ColaborationService {
@@ -18,6 +20,12 @@ public class ColaborationService {
     private final DeleteColaborationService deleteColaborationService;
     private final FindColaborationByIdService findColaborationByIdService;
     private final UploadColaborationImageService uploadColaborationImageService;
+    private final ListByUserColaborationService listByUserColaboration;
+    private final ListAllColaborations listAllColaborations;
+
+    public List<ColaborationResponseDTO> listColaborations() {
+        return listAllColaborations.execute();
+    }
 
     public ColaborationResponseDTO createColaboration(Long userId, ColaborationRequestDTO dto) {
         return createColaborationService.execute(userId, dto);
@@ -31,6 +39,9 @@ public class ColaborationService {
         return uploadColaborationImageService.execute(id, file);
     }
 
+    public List<ColaborationResponseDTO> listByUserColaboration(Long userid) {
+        return listByUserColaboration.execute(userid);
+    }
 
     public void deleteColaboration(Long id) {
         deleteColaborationService.execute(id);

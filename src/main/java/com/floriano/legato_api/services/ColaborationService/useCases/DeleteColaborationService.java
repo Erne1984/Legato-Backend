@@ -16,7 +16,6 @@ public class DeleteColaborationService {
         Colaboration colab = colaborationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Colaboração com id " + id + " não encontrada"));
 
-        // Remove da lista do usuário (caso você mantenha essa coleção no User)
         User owner = colab.getUser();
         if (owner != null && owner.getColaborations() != null) {
             owner.getColaborations().remove(colab);

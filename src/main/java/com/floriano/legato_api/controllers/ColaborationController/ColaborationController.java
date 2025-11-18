@@ -17,6 +17,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("colab")
 @Tag(name = "colab")
@@ -26,10 +28,33 @@ public class ColaborationController {
     private final ColaborationService colaborationService;
 
     @Operation(
+            summary = "Listar colaborações",
+            description = "Permite que o usuário autenticado liste  colaborações. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ColaborationResponseDTO>>> listColaboration() {
+        List<ColaborationResponseDTO> responseDTO = colaborationService.listColaborations();
+
+        return ResponseFactory.ok("Colaborações recuperadas com sucesso!", responseDTO);
+    }
+
+    @Operation(
+            summary = "Listar colaborações do usuário",
+            description = "Permite que o usuário autenticado liste suas colaborações. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse<List<ColaborationResponseDTO>>> listColaborationUsers(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Long userId = userPrincipal.getUser().getId();
+        List<ColaborationResponseDTO> responseDTO = colaborationService.listByUserColaboration(userId);
+
+        return ResponseFactory.ok("Colaborações recuperadas com sucesso!", responseDTO);
+    }
+
+    @Operation(
             summary = "Criar colaboração",
             description = "Permite que o usuário autenticado crie uma colaboração. "
                     + "O ID do criador é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
-    @PostMapping(value = "/colaborations")
+    @PostMapping
     public ResponseEntity<ApiResponse<ColaborationResponseDTO>> createColaboration(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                                                    @RequestBody ColaborationRequestDTO dto) {
         Long userId = userPrincipal.getUser().getId();
