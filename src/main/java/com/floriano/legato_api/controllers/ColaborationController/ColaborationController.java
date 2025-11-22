@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("colab")
-@Tag(name = "colab")
+@Tag(name = "Collaborations")
 @RequiredArgsConstructor
 public class ColaborationController {
 
@@ -63,6 +63,10 @@ public class ColaborationController {
         return ResponseFactory.ok("Colaboração criada com sucesso!", responseDTO);
     }
 
+    @Operation(
+            summary = "Atualizar imagem da colaboração",
+            description = "Permite que o usuário autenticado atualize uma imagem da colaboração. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
     @PutMapping("/{id}/upload-image")
     public ResponseEntity<ApiResponse<ColaborationResponseDTO>> uploadImage(
             @PathVariable Long id,

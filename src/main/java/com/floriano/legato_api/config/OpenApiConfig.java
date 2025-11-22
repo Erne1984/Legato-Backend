@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         servers = {
                 @Server(
                         description = "Local Environment",
-                        url = "http://localhost:8080/"
+                        url = "http://localhost:8081/"
                 ),
                 @Server(
                         description = "Production Environment",
@@ -42,6 +42,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         tags = {
                 @Tag(name = "Users", description = "Endpoints related to users"),
                 @Tag(name = "Notifications", description = "Endpoints related to notifications"),
+                @Tag(name = "Collaborations", description = "Endpoints related to collaborations"),
+                @Tag(name = "Posts", description = "Endpoints related to posts"),
+                @Tag(name = "Posts", description = "Endpoints related to posts"),
+                @Tag(name = "Auth", description = "Endpoints related to authentication and registration"),
         },
         externalDocs = @ExternalDocumentation(
                 description = "Full documentation, request/response examples, and usage guides",

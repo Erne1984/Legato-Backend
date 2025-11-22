@@ -16,15 +16,18 @@ public class CloudinaryService {
     private Cloudinary cloudinary;
 
     public String uploadFile(MultipartFile file, String folderName) {
-        try{
-            HashMap<Object, Object> options = new HashMap<>();
+        try {
+            Map<String, Object> options = new HashMap<>();
             options.put("folder", folderName);
+            options.put("resource_type", "auto");
+
             Map uploadedFile = cloudinary.uploader().upload(file.getBytes(), options);
-            String publicId = (String) uploadedFile.get("public_id");
-            return cloudinary.url().secure(true).generate(publicId);
-        }catch (IOException e){
-            e.printStackTrace();
-            return null;
+
+            return (String) uploadedFile.get("secure_url");
+
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao fazer upload no Cloudinary", e);
         }
     }
+
 }

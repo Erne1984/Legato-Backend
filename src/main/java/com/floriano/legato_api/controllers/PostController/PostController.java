@@ -1,0 +1,42 @@
+package com.floriano.legato_api.controllers.PostController;
+
+import com.floriano.legato_api.dto.PostDTO.PostRequestDTO;
+import com.floriano.legato_api.dto.PostDTO.PostResponseDTO;
+import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
+import com.floriano.legato_api.model.User.User;
+import com.floriano.legato_api.model.User.UserPrincipal;
+import com.floriano.legato_api.services.PostService.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("posts")
+@AllArgsConstructor
+@Tag(name = "Posts")
+public class PostController {
+
+    private final PostService postService;
+
+    @Operation(
+            summary = "Criar Post",
+            description = "Permite que o usuário crie um post em seu perfil "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<PostResponseDTO> createPost(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestPart(value = "content", required = false) String content,
+            @RequestPart(value = "media", required = false) MultipartFile media
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long id = authenticatedUser.getId();
+
+        PostResponseDTO response = postService.createPost(id, content, media);
+        return ResponseEntity.ok(response);
+    }
+}
