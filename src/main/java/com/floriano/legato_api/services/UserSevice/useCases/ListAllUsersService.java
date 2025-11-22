@@ -19,9 +19,11 @@ public class ListAllUsersService {
 
     public List<UserResponseDTO> execute() {
         List<User> users = userRepository.findAll();
-
         List<UserResponseDTO> userResponseDTOS = users.stream().map(UserMapper:: toDTO).toList();
-
         return userResponseDTOS;
+    }
+
+    public List<User> getRawUsers() {
+        return userRepository.findAll();
     }
 }

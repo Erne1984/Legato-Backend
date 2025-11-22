@@ -26,6 +26,8 @@ public class UserUpdateDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LocationDTO {
+        private Double latitude;
+        private Double longitude;
         private String city;
         private String state;
         private String country;

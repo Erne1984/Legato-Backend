@@ -1,6 +1,7 @@
 package com.floriano.legato_api.services.UserSevice;
 
 import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
+import com.floriano.legato_api.dto.UserDTO.NearbyUserDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
 import com.floriano.legato_api.mapper.connection.ConnectionRequestMapper;
@@ -35,6 +36,7 @@ public class UserService {
     private final ListBlockedUsersService listBlockedUsersService;
     private final ListConnectionsService listConnectionsService;
     private final UpdateUserImageService UpdateUserImageService;
+    private final FindNearbyUsersService findNearbyUsersService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -127,5 +129,11 @@ public class UserService {
 
     public List<UserResponseDTO> listBlockedUsers(Long userId) {
         return listBlockedUsersService.execute(userId);
+    }
+
+    // GEOLOCALIZATION
+
+    public List<NearbyUserDTO> findNearbyUsers(Long userId, double radiusKm) {
+        return findNearbyUsersService.execute(userId, radiusKm);
     }
 }

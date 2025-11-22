@@ -59,12 +59,21 @@ public class UserUpdateHelper {
         Location location = user.getLocation();
         if (location == null) location = new Location();
 
+        if(dto.getLocation().getLatitude() != null)
+            location.setLatitude(dto.getLocation().getLatitude());
+
+        if(dto.getLocation().getLongitude() != null)
+            location.setLongitude(dto.getLocation().getLongitude());
+
+
         if (dto.getLocation().getCity() != null)
             location.setCity(dto.getLocation().getCity());
         if (dto.getLocation().getState() != null)
             location.setState(dto.getLocation().getState());
         if (dto.getLocation().getCountry() != null)
             location.setCountry(dto.getLocation().getCountry());
+
+        location.setUpdatedAt(java.time.LocalDateTime.now());
 
         user.setLocation(location);
     }

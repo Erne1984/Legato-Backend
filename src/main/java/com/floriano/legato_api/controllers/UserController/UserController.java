@@ -1,6 +1,7 @@
 package com.floriano.legato_api.controllers.UserController;
 
 import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
+import com.floriano.legato_api.dto.UserDTO.NearbyUserDTO;
 import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
@@ -38,9 +39,21 @@ public class UserController {
         return ResponseFactory.ok("Lista recuperada com sucesso!", userResponseDTOList);
     }
 
+    @Operation(summary = "Get users nearby", description = "Returns the complete list of registered users by location", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/nearby")
+    public ResponseEntity<List<NearbyUserDTO>> nearbyUsers(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @RequestParam(defaultValue = "10") double radiusKm) {
+
+        Long id = userPrincipal.getUser().getId();
+        List<NearbyUserDTO> result = userService.findNearbyUsers(id, radiusKm);
+        return ResponseEntity.ok(result);
+    }
+
     @Operation(summary = "Update user", description = "Updates an existing user by ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(@PathVariable Long id,  @RequestBody UserUpdateDTO dto ) {
+    @PutMapping
+    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(@AuthenticationPrincipal UserPrincipal userPrincipal,  @RequestBody UserUpdateDTO dto ) {
+        Long id = userPrincipal.getUser().getId();
         UserResponseDTO responseDTO = userService.updateUser(id, dto);
         return ResponseFactory.ok("User updated successfully", responseDTO);
     }
