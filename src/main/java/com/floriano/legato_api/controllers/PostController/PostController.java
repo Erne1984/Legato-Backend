@@ -2,6 +2,7 @@ package com.floriano.legato_api.controllers.PostController;
 
 import com.floriano.legato_api.dto.PostDTO.PostRequestDTO;
 import com.floriano.legato_api.dto.PostDTO.PostResponseDTO;
+import com.floriano.legato_api.dto.PostDTO.PostUpdateDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.model.User.UserPrincipal;
@@ -54,6 +55,23 @@ public class PostController {
         Long id = authenticatedUser.getId();
 
         List<PostResponseDTO> response = postService.listPosts(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Atualizar o post",
+            description = "Atualiza o post de um usuário "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @PutMapping("/{postId}")
+    public ResponseEntity<PostResponseDTO> updatePost(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId,
+            @RequestBody PostUpdateDTO dto
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long userId = authenticatedUser.getId();
+
+        PostResponseDTO response = postService.updatePostService(userId, postId, dto.content());
         return ResponseEntity.ok(response);
     }
 }

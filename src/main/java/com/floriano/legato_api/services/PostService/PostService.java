@@ -3,6 +3,7 @@ package com.floriano.legato_api.services.PostService;
 import com.floriano.legato_api.dto.PostDTO.PostResponseDTO;
 import com.floriano.legato_api.services.PostService.UseCases.CreatePostService;
 import com.floriano.legato_api.services.PostService.UseCases.ListAllPostsByUserService;
+import com.floriano.legato_api.services.PostService.UseCases.UpdatePostService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ public class PostService {
 
     private final CreatePostService createPostService;
     private final ListAllPostsByUserService listAllPostsByUserService;
+    private final UpdatePostService updatePostService;
 
     public PostResponseDTO createPost(Long userId, String dto, MultipartFile mediaFile) {
         return  createPostService.execute(userId, dto, mediaFile);
@@ -22,5 +24,9 @@ public class PostService {
 
     public List<PostResponseDTO> listPosts(long userId) {
         return listAllPostsByUserService.execute(userId);
+    }
+
+    public PostResponseDTO updatePostService(Long userId, Long postId, String content) {
+        return  updatePostService.execute(userId, postId, content);
     }
 }
