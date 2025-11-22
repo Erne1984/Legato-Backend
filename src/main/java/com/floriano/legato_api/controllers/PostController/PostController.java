@@ -15,6 +15,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("posts")
 @AllArgsConstructor
@@ -37,6 +39,21 @@ public class PostController {
         Long id = authenticatedUser.getId();
 
         PostResponseDTO response = postService.createPost(id, content, media);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Listar Posts",
+            description = "Lista os posts de um usuário "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @GetMapping
+    public ResponseEntity<List<PostResponseDTO>> listPosts(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long id = authenticatedUser.getId();
+
+        List<PostResponseDTO> response = postService.listPosts(id);
         return ResponseEntity.ok(response);
     }
 }
