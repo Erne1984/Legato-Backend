@@ -1,5 +1,6 @@
 package com.floriano.legato_api.controllers.CommentController;
 
+import com.floriano.legato_api.dto.ColaborationDTO.ColaborationResponseDTO;
 import com.floriano.legato_api.dto.CommentDTO.CommentRequestDTO;
 import com.floriano.legato_api.dto.CommentDTO.CommentResponseDTO;
 import com.floriano.legato_api.model.User.UserPrincipal;
@@ -12,10 +13,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("comments")
@@ -24,6 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @Operation(
+            summary = "Listar comentários do usuário em uma publicação",
+            description = "Permite que o usuário autenticado visualize seus comentários em uma publicação. "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse<List<CommentResponseDTO>>> listColaborationUsers(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Long userId = userPrincipal.getUser().getId();
+        List<CommentResponseDTO> responseDTO = commentService.listUserComments(userId);
+
+        return ResponseFactory.ok("Colaborações recuperadas com sucesso!", responseDTO);
+    }
 
     @Operation(
             summary = "Criar comentário",
