@@ -59,7 +59,7 @@ public class PostController {
     }
 
     @Operation(
-            summary = "Atualizar o post",
+            summary = "Atualizar um post",
             description = "Atualiza o post de um usuário "
                     + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
     @PutMapping("/{postId}")
@@ -72,6 +72,22 @@ public class PostController {
         Long userId = authenticatedUser.getId();
 
         PostResponseDTO response = postService.updatePostService(userId, postId, dto.content());
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Deletar um Post",
+            description = "Deletar um Post de um usuário "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<PostResponseDTO> deletePost(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long userId = authenticatedUser.getId();
+
+        PostResponseDTO response = postService.deletePost(userId, postId);
         return ResponseEntity.ok(response);
     }
 }
