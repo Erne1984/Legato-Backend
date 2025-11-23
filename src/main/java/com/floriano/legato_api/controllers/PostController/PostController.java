@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("posts")
@@ -89,5 +90,22 @@ public class PostController {
 
         PostResponseDTO response = postService.deletePost(userId, postId);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Curtir/descurtir um Post",
+            description = "Usuário curtindo/descurtindo um Post "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @PostMapping("/{postId}/likes")
+    public ResponseEntity<Map<String, Boolean>> likeDislikePost(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long userId = authenticatedUser.getId();
+
+        Boolean liked = postService.toggleLike(postId , userId);
+
+        return ResponseEntity.ok(Map.of("liked", liked));
     }
 }

@@ -46,7 +46,7 @@ public class SendConnectionRequestService {
         notificationDTO.setMessage("Você recebeu um pedido de conexão de " + sender.getUsername());
         notificationDTO.setRead(false);
 
-        createNotificationService.execute(sender.getId(), notificationDTO);
+        createNotificationService.execute(notificationDTO);
 
         return UserMapper.toDTO(receiver);
     }

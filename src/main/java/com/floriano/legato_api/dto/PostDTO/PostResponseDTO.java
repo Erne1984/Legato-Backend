@@ -17,6 +17,8 @@ public class PostResponseDTO {
     private TypeMedia typeMedia;
     private String urlMedia;
 
+    private int likes;
+
     private Long userId;
     private String username;
     private String displayName;

@@ -48,7 +48,7 @@ public class FollowUserService {
         dto.setMessage(follower.getUsername() + " começou a seguir você.");
         dto.setRead(false);
 
-        createNotificationService.execute(follower.getId(), dto);
+        createNotificationService.execute(dto);
 
         return UserMapper.toDTO(target);
     }

@@ -45,7 +45,7 @@ public class AcceptConnectionRequestService {
         dto.setMessage(receiver.getUsername() + " aceitou seu pedido de conexão.");
         dto.setRead(false);
 
-        createNotificationService.execute(receiver.getId(), dto);
+        createNotificationService.execute(dto);
     }
 }
 

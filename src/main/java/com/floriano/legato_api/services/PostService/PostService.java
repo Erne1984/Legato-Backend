@@ -1,10 +1,7 @@
 package com.floriano.legato_api.services.PostService;
 
 import com.floriano.legato_api.dto.PostDTO.PostResponseDTO;
-import com.floriano.legato_api.services.PostService.UseCases.CreatePostService;
-import com.floriano.legato_api.services.PostService.UseCases.DeletePostService;
-import com.floriano.legato_api.services.PostService.UseCases.ListAllPostsByUserService;
-import com.floriano.legato_api.services.PostService.UseCases.UpdatePostService;
+import com.floriano.legato_api.services.PostService.UseCases.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +16,7 @@ public class PostService {
     private final ListAllPostsByUserService listAllPostsByUserService;
     private final UpdatePostService updatePostService;
     private final DeletePostService deletePostService;
+    private final ToggleLikeService toggleLikeService;
 
     public PostResponseDTO createPost(Long userId, String dto, MultipartFile mediaFile) {
         return  createPostService.execute(userId, dto, mediaFile);
@@ -34,5 +32,9 @@ public class PostService {
 
     public PostResponseDTO deletePost(Long userId, Long postId) {
         return deletePostService.execute(userId, postId);
+    }
+
+    public boolean toggleLike(Long postId, Long userId) {
+        return toggleLikeService.execute(postId, userId);
     }
 }

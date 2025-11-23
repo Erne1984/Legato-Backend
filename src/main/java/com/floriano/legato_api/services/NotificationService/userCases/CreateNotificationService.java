@@ -23,8 +23,8 @@ public class CreateNotificationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public NotificationResponseDTO execute(Long idUser, NotificationRequestDTO dto) {
-        User sender = userRepository.findById(idUser)
+    public NotificationResponseDTO execute(NotificationRequestDTO dto) {
+        User sender = userRepository.findById(dto.getSenderId())
                 .orElseThrow(() -> new IllegalArgumentException("Sender not found"));
 
         User recipient = userRepository.findById(dto.getRecipientId())
