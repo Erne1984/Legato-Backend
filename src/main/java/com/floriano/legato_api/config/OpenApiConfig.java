@@ -16,8 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         info = @Info(
                 title = "LEGATO - OpenAPI Specification",
                 description = "API for serving the Legato plataform "
-                        + "schools of thought, and quotes. "
-                        + "Provides endpoints to explore the history of philosophy and its connections.",
+                        + "Provides endpoints to explore the history of philosophy and its .",
                 version = "1.0",
                 contact = @Contact(
                         name = "Ernesto Floriano Amorim",
@@ -44,7 +43,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 @Tag(name = "Notifications", description = "Endpoints related to notifications"),
                 @Tag(name = "Collaborations", description = "Endpoints related to collaborations"),
                 @Tag(name = "Posts", description = "Endpoints related to posts"),
-                @Tag(name = "Posts", description = "Endpoints related to posts"),
+                @Tag(name = "Comments", description = "Endpoints related to comments"),
                 @Tag(name = "Auth", description = "Endpoints related to authentication and registration"),
         },
         externalDocs = @ExternalDocumentation(

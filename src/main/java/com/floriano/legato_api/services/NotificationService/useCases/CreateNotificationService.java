@@ -1,6 +1,5 @@
-package com.floriano.legato_api.services.NotificationService.userCases;
+package com.floriano.legato_api.services.NotificationService.useCases;
 
-import com.floriano.legato_api.dto.ColaborationDTO.ColaborationResponseDTO;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationRequestDTO;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationResponseDTO;
 import com.floriano.legato_api.mapper.NotificationMapper.NotificationMapper;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

@@ -8,7 +8,7 @@ import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.ConnectionRequestRepository;
 import com.floriano.legato_api.repositories.UserRepository;
-import com.floriano.legato_api.services.NotificationService.userCases.CreateNotificationService;
+import com.floriano.legato_api.services.NotificationService.useCases.CreateNotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

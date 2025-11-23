@@ -7,7 +7,7 @@ import com.floriano.legato_api.model.Post.Post;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.PostRepository;
 import com.floriano.legato_api.repositories.UserRepository;
-import com.floriano.legato_api.services.NotificationService.userCases.CreateNotificationService;
+import com.floriano.legato_api.services.NotificationService.useCases.CreateNotificationService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -18,6 +18,7 @@ public class PostMapper {
                 post.getUrlMedia() != null ? post.getUrlMedia() : null,
 
                 post.getLikes().size(),
+                post.getComments().size(),
                 user.getId(),
                 user.getUsername(),
                 user.getDisplayName(),

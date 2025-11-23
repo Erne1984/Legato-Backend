@@ -18,6 +18,7 @@ public class PostResponseDTO {
     private String urlMedia;
 
     private int likes;
+    private int commentsNumber;
 
     private Long userId;
     private String username;

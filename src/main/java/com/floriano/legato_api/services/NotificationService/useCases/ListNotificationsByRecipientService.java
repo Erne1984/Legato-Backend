@@ -1,6 +1,5 @@
-package com.floriano.legato_api.services.NotificationService.userCases;
+package com.floriano.legato_api.services.NotificationService.useCases;
 
-import com.floriano.legato_api.dto.NotificationDTO.NotificationRequestDTO;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationResponseDTO;
 import com.floriano.legato_api.mapper.NotificationMapper.NotificationMapper;
 import com.floriano.legato_api.model.Notification.Notification;

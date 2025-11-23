@@ -6,7 +6,7 @@ import com.floriano.legato_api.exceptions.UserNotFoundException;
 import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.UserRepository;
-import com.floriano.legato_api.services.NotificationService.userCases.CreateNotificationService;
+import com.floriano.legato_api.services.NotificationService.useCases.CreateNotificationService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
