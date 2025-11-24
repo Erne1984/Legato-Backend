@@ -3,6 +3,9 @@ package com.floriano.legato_api.controllers.CommentController;
 import com.floriano.legato_api.dto.ColaborationDTO.ColaborationResponseDTO;
 import com.floriano.legato_api.dto.CommentDTO.CommentRequestDTO;
 import com.floriano.legato_api.dto.CommentDTO.CommentResponseDTO;
+import com.floriano.legato_api.dto.PostDTO.PostResponseDTO;
+import com.floriano.legato_api.dto.PostDTO.PostUpdateDTO;
+import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.payload.ApiResponse;
 import com.floriano.legato_api.payload.ResponseFactory;
@@ -48,5 +51,38 @@ public class CommentController {
         CommentResponseDTO responseDTO = commentService.createComment(userId, dto);
 
         return ResponseFactory.ok("Comentário publicado com sucesso!", responseDTO);
+    }
+
+    @Operation(
+            summary = "Atualizar um comentário",
+            description = "Atualizar o comentário de um usuário "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @PutMapping("/{postId}")
+    public ResponseEntity<CommentResponseDTO> updateComment(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId,
+            @RequestBody PostUpdateDTO dto
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long userId = authenticatedUser.getId();
+
+        CommentResponseDTO response = commentService.updateComment(userId, postId, dto.content());
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Deletar um comentário",
+            description = "Deletar um comentário de um usuário "
+                    + "O ID do usuário é obtido automaticamente a partir do token JWT.", security = { @SecurityRequirement(name = "bearerAuth") })
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<CommentResponseDTO> deleteComment(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable Long postId
+    ) {
+        User authenticatedUser = userPrincipal.getUser();
+        Long userId = authenticatedUser.getId();
+
+        CommentResponseDTO response = commentService.deleteComment(userId, postId);
+        return ResponseEntity.ok(response);
     }
 }

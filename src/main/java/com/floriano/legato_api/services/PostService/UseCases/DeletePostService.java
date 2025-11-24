@@ -22,7 +22,7 @@ public class DeletePostService {
                 .orElseThrow(() -> new PostNotFoundException("Post não encontrado"));
 
         if (!post.getUser().getId().equals(userId)) {
-            throw new ForbiddenActionException("Você não pode editar este post");
+            throw new ForbiddenActionException("Você não pode excluir este post");
         }
 
         postRepository.delete(post);
