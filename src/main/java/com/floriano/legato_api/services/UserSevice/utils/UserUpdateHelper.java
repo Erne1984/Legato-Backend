@@ -27,6 +27,9 @@ public class UserUpdateHelper {
         if (dto.getSex() != null)
             user.setSex(UserSex.valueOf(dto.getSex().toUpperCase()));
 
+        if (dto.getBio() != null)
+            user.setBio(dto.getBio());
+
         if (dto.getGoal() != null)
             user.setGoal(dto.getGoal());
     }

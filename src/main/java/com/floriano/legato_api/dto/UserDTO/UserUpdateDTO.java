@@ -14,6 +14,7 @@ public class UserUpdateDTO {
     private String profileBanner;
     private List<String> photosCard;
     private String sex;
+    private String bio;
     private String goal;
 
     private List<String> instruments;

@@ -38,6 +38,9 @@ public class User {
     private String profilePicture;
     private String profileBanner;
 
+    @Column(length = 355, nullable = true)
+    private String bio;
+
     @ElementCollection
     @CollectionTable(name = "user_photos_card", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "photo_url")

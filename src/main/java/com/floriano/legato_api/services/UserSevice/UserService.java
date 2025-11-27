@@ -37,6 +37,7 @@ public class UserService {
     private final ListConnectionsService listConnectionsService;
     private final UpdateUserImageService UpdateUserImageService;
     private final FindNearbyUsersService findNearbyUsersService;
+    private final FindUserByUsername findUserByUsername;
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
@@ -52,6 +53,10 @@ public class UserService {
 
     public User findById(Long id) {
         return findByIdService.execute(id);
+    }
+
+    public UserResponseDTO findUserByUsername(String username) {
+        return findUserByUsername.execute(username, true);
     }
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO dto) {

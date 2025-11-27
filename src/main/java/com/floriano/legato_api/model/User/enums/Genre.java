@@ -3,6 +3,8 @@ package com.floriano.legato_api.model.User.enums;
 public enum Genre {
 
     ROCK("Rock"),
+    INDIE("Indie"),
+    MPB("Mpb"),
     POP("Pop"),
     HIP_HOP("Hip Hop"),
     RNB_SOUL("R&B & Soul"),

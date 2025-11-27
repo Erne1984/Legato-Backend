@@ -5,6 +5,7 @@ import com.floriano.legato_api.dto.UserDTO.NearbyUserDTO;
 import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
+import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.model.User.UserPrincipal;
@@ -30,6 +31,21 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @Operation(summary = "Get user by id", description = "Returns the user by id", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Long id = userPrincipal.getUser().getId();
+        User user = userService.findById(id);
+        return ResponseFactory.ok("Usuário recuperada com sucesso!", UserMapper.toDTO(user));
+    }
+
+    @Operation(summary = "Get user by username", description = "Returns the user by username", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/{username}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserByUsername(@PathVariable String username) {
+        UserResponseDTO user = userService.findUserByUsername(username);
+        return ResponseFactory.ok("Usuário recuperada com sucesso!", user);
     }
 
     @Operation(summary = "Get all users", description = "Returns the complete list of registered users", security = @SecurityRequirement(name = "bearerAuth"))

@@ -34,6 +34,7 @@ public class UserResponseDTO {
     private List<String> favoriteArtistsSpotifyId = new ArrayList<>();
     private List<String> genres = new ArrayList<>();
 
+    private String bio;
     private String goal;
 
     private Location location;
@@ -55,4 +56,5 @@ public class UserResponseDTO {
     private Set<Long> connectionIds;
     private Set<Long> followerIds;
     private Set<Long> followingIds;
+    private Set<Long> postsIds;
 }

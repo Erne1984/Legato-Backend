@@ -19,6 +19,7 @@ public class UserRequestDTO {
     private String profileBanner;
     private List<String> photosCard;
     private String sex;
+    private String bio;
     private String goal;
 
     // PREFERÊNCIAS MUSICAIS

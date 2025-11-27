@@ -1,14 +1,15 @@
 package com.floriano.legato_api.model.User.enums;
 
 public enum InstrumentList {
-    GUITARIST("guitarist"),
-    KEYBOARDIST("keyboardist"),
-    DRUMMER("drummer"),
-    VOCALIST("vocalist"),
-    COMPOSER("Composer"),
-    BASSIST("bassist"),
+    GUITARRISTA("guitarrista"),
+    TECLADISTA("tecladista"),
+    BATERISTA("baterista"),
+    VOCALISTA("vocalista"),
+    COMPOSITOR("compositor"),
+    BAIXISTA("baixista"),
     DJ("dj"),
-    OTHER("other");
+    OUTRO("outro");
+
 
     private String instrument;
 
