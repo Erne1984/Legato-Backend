@@ -158,6 +158,19 @@ public class UserController {
     }
 
     @Operation(
+            summary = "Listar seguidores do usuário autenticado",
+            description = "Retorna todos os Seguidores ao usuário autenticado.",
+            security = { @SecurityRequirement(name = "bearerAuth") }
+    )
+    @GetMapping("/followers/{userId}")
+    public ResponseEntity<ApiResponse<List<UserListDTO>>> listFollowers(
+            @PathVariable Long userId
+    ) {
+        List<UserListDTO> connections = userService.listFollowers(userId);
+        return ResponseFactory.ok("Seguidores recuperadas com sucesso!", connections);
+    }
+
+    @Operation(
             summary = "Remover conexão existente",
             description = "Permite que o usuário autenticado remova uma conexão já existente entre dois usuários.",
             security = { @SecurityRequirement(name = "bearerAuth") }

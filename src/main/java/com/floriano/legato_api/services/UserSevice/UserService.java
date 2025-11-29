@@ -36,6 +36,7 @@ public class UserService {
     private final UnblockUserService unblockUserService;
     private final ListBlockedUsersService listBlockedUsersService;
     private final ListConnectionsService listConnectionsService;
+    private final ListFollowersService listFollowersService;
     private final UpdateUserImageService UpdateUserImageService;
     private final FindNearbyUsersService findNearbyUsersService;
     private final FindUserByUsername findUserByUsername;
@@ -102,6 +103,10 @@ public class UserService {
 
     public List<UserResponseDTO> listConnections(Long userId) {
         return listConnectionsService.execute(userId);
+    }
+
+    public List<UserListDTO> listFollowers(Long userId) {
+        return listFollowersService.execute(userId);
     }
 
     public List<ConnectionRequestResponseDTO> listSentRequests(Long userId) {
