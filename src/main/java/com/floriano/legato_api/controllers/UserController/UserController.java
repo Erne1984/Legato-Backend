@@ -1,10 +1,7 @@
 package com.floriano.legato_api.controllers.UserController;
 
 import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
-import com.floriano.legato_api.dto.UserDTO.NearbyUserDTO;
-import com.floriano.legato_api.dto.UserDTO.UserRequestDTO;
-import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
-import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
+import com.floriano.legato_api.dto.UserDTO.*;
 import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.Connection.ConnectionRequest;
 import com.floriano.legato_api.model.User.User;
@@ -50,8 +47,8 @@ public class UserController {
 
     @Operation(summary = "Get all users", description = "Returns the complete list of registered users", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getUsers() {
-        List<UserResponseDTO> userResponseDTOList = userService.listAllUsers();
+    public ResponseEntity<ApiResponse<List<UserListDTO>>> getUsers() {
+        List<UserListDTO> userResponseDTOList = userService.listAllUsers();
         return ResponseFactory.ok("Lista recuperada com sucesso!", userResponseDTOList);
     }
 

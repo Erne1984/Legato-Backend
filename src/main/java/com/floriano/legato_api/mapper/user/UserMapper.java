@@ -1,5 +1,6 @@
 package com.floriano.legato_api.mapper.user;
 
+import com.floriano.legato_api.dto.UserDTO.UserListDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.model.User.User;
 
@@ -61,6 +62,20 @@ public class UserMapper {
                         .map(User::getId)
                         .collect(Collectors.toSet())
         );
+
+        return dto;
+    }
+
+    public static UserListDTO toListDTO(User user) {
+        UserListDTO dto = new UserListDTO();
+
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setDisplayName(user.getDisplayName());
+        dto.setProfilePicture(user.getProfilePicture());
+
+        dto.setFollowersCount(user.getFollowers().size());
+        dto.setFollowingCount(user.getFollowing().size());
 
         return dto;
     }

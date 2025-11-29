@@ -1,5 +1,6 @@
 package com.floriano.legato_api.services.UserSevice.useCases;
 
+import com.floriano.legato_api.dto.UserDTO.UserListDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.User.User;
@@ -17,9 +18,9 @@ public class ListAllUsersService {
         this.userRepository = userRepository;
     }
 
-    public List<UserResponseDTO> execute() {
+    public List<UserListDTO> execute() {
         List<User> users = userRepository.findAll();
-        List<UserResponseDTO> userResponseDTOS = users.stream().map(UserMapper:: toDTO).toList();
+        List<UserListDTO> userResponseDTOS = users.stream().map(UserMapper:: toListDTO).toList();
         return userResponseDTOS;
     }
 

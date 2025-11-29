@@ -2,6 +2,7 @@ package com.floriano.legato_api.services.UserSevice;
 
 import com.floriano.legato_api.dto.ConnectionDTO.ConnectionRequestResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.NearbyUserDTO;
+import com.floriano.legato_api.dto.UserDTO.UserListDTO;
 import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
 import com.floriano.legato_api.mapper.connection.ConnectionRequestMapper;
@@ -43,7 +44,7 @@ public class UserService {
 
     // CRUD
 
-    public List<UserResponseDTO> listAllUsers() {
+    public List<UserListDTO> listAllUsers() {
         return listAllUsersService.execute();
     }
 
