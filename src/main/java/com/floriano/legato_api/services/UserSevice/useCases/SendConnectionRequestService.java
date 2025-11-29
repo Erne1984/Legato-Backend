@@ -5,6 +5,8 @@ import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
 import com.floriano.legato_api.exceptions.UserNotFoundException;
 import com.floriano.legato_api.mapper.user.UserMapper;
 import com.floriano.legato_api.model.Connection.ConnectionRequest;
+import com.floriano.legato_api.model.Notification.enums.NotificationTargetType;
+import com.floriano.legato_api.model.Notification.enums.NotificationType;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.ConnectionRequestRepository;
 import com.floriano.legato_api.repositories.UserRepository;
@@ -34,6 +36,7 @@ public class SendConnectionRequestService {
         boolean alreadyPending = connectionRequestRepository.existsBySenderAndReceiverAndStatusPending(sender, receiver);
         if (alreadyPending)
             throw new IllegalArgumentException("Já existe um pedido pendente entre esses usuários.");
+
         if (Objects.equals(sender.getId(), receiverId))
             throw new IllegalArgumentException("Usuário não pode enviar conexão para si mesmo.");
 
@@ -44,7 +47,10 @@ public class SendConnectionRequestService {
         notificationDTO.setSenderId(sender.getId());
         notificationDTO.setRecipientId(receiver.getId());
         notificationDTO.setMessage("Você recebeu um pedido de conexão de " + sender.getUsername());
-        notificationDTO.setRead(false);
+        notificationDTO.setType(NotificationType.CONNECTION_REQUEST);
+        notificationDTO.setTargetType(NotificationTargetType.USER);
+        notificationDTO.setTargetId(sender.getId());
+        notificationDTO.setCreatedAt(null);
 
         createNotificationService.execute(notificationDTO);
 

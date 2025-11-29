@@ -3,6 +3,8 @@ package com.floriano.legato_api.services.PostService.UseCases;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationRequestDTO;
 import com.floriano.legato_api.exceptions.PostNotFoundException;
 import com.floriano.legato_api.exceptions.UserNotFoundException;
+import com.floriano.legato_api.model.Notification.enums.NotificationTargetType;
+import com.floriano.legato_api.model.Notification.enums.NotificationType;
 import com.floriano.legato_api.model.Post.Post;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.PostRepository;
@@ -24,6 +26,7 @@ public class ToggleLikeService {
 
     @Transactional
     public boolean execute(Long postId, Long userId) {
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post não encontrado"));
 
@@ -46,11 +49,15 @@ public class ToggleLikeService {
         boolean isOwner = post.getUser().getId().equals(userId);
 
         if (liked && !jaCurtiaAntes && !isOwner) {
+
             NotificationRequestDTO dto = new NotificationRequestDTO();
             dto.setSenderId(user.getId());
             dto.setRecipientId(post.getUser().getId());
-            dto.setMessage("Usuário " + user.getUsername() + " curtiu seu post!");
-            dto.setRead(false);
+            dto.setMessage("@" + user.getUsername() + " curtiu seu post");
+            dto.setType(NotificationType.LIKE);
+            dto.setTargetType(NotificationTargetType.POST);
+            dto.setTargetId(post.getId());
+            dto.setCreatedAt(null);
 
             createNotificationService.execute(dto);
         }

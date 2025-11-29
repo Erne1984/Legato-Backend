@@ -1,5 +1,7 @@
 package com.floriano.legato_api.dto.NotificationDTO;
 
+import com.floriano.legato_api.model.Notification.enums.NotificationTargetType;
+import com.floriano.legato_api.model.Notification.enums.NotificationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +23,10 @@ public class NotificationResponseDTO {
 
     private String message;
     private boolean read;
-
     private String timeAgo;
+
+    private NotificationType type;
+    private NotificationTargetType targetType;
+    private Long targetId;
 }
+

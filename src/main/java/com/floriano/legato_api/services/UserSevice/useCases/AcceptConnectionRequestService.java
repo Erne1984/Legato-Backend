@@ -3,6 +3,8 @@ package com.floriano.legato_api.services.UserSevice.useCases;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationRequestDTO;
 import com.floriano.legato_api.exceptions.UserNotFoundException;
 import com.floriano.legato_api.model.Connection.ConnectionRequest;
+import com.floriano.legato_api.model.Notification.enums.NotificationTargetType;
+import com.floriano.legato_api.model.Notification.enums.NotificationType;
 import com.floriano.legato_api.model.User.User;
 import com.floriano.legato_api.repositories.ConnectionRequestRepository;
 import com.floriano.legato_api.repositories.UserRepository;
@@ -43,7 +45,10 @@ public class AcceptConnectionRequestService {
         dto.setSenderId(receiver.getId());
         dto.setRecipientId(sender.getId());
         dto.setMessage(receiver.getUsername() + " aceitou seu pedido de conexão.");
-        dto.setRead(false);
+        dto.setType(NotificationType.CONNECTION_ACCEPTED);
+        dto.setTargetType(NotificationTargetType.USER);
+        dto.setTargetId(receiver.getId());
+        dto.setCreatedAt(null);
 
         createNotificationService.execute(dto);
     }

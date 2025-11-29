@@ -1,10 +1,6 @@
 package com.floriano.legato_api.controllers.NotificationController;
 
-import com.floriano.legato_api.dto.ColaborationDTO.ColaborationResponseDTO;
 import com.floriano.legato_api.dto.NotificationDTO.NotificationResponseDTO;
-import com.floriano.legato_api.dto.UserDTO.UserResponseDTO;
-import com.floriano.legato_api.dto.UserDTO.UserUpdateDTO;
-import com.floriano.legato_api.mapper.NotificationMapper.NotificationMapper;
 import com.floriano.legato_api.model.User.UserPrincipal;
 import com.floriano.legato_api.payload.ApiResponse;
 import com.floriano.legato_api.payload.ResponseFactory;
@@ -21,20 +17,53 @@ import java.util.List;
 
 @RestController
 @RequestMapping("notifications")
-@Tag(name = "Notifications")
+@Tag(name = "Notifications", description = "Operations related to user notifications")
 @RequiredArgsConstructor
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @Operation(summary = "Get Notifications by userId",
-            description = "get Notifications from an existing user by ID",
-            security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> listNotificationsByUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+    @Operation(
+            summary = "List notifications of authenticated user",
+            description = "Returns all notifications belonging to the currently authenticated user.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> listNotificationsByUser(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
         Long receiverId = userPrincipal.getUser().getId();
-        List<NotificationResponseDTO> notificationResponseDTOS = notificationService.findAllByRecipient(receiverId);
-        return ResponseFactory.ok("Notifications retrievied successfully", notificationResponseDTOS);
+        List<NotificationResponseDTO> notifications =
+                notificationService.findAllByRecipient(receiverId);
+
+        return ResponseFactory.ok("Notifications retrieved successfully", notifications);
+    }
+
+    @Operation(
+            summary = "Delete a notification by ID",
+            description = "Deletes a specific notification belonging to the authenticated user.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        notificationService.deleteNotification(id, userPrincipal.getUser().getId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Mark all notifications as read",
+            description = "Marks all notifications of the authenticated user as read.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @PostMapping("/read-all")
+    public ResponseEntity<Void> markAllAsRead(
+            @AuthenticationPrincipal UserPrincipal userPrincipal
+    ) {
+        notificationService.markAllAsRead(userPrincipal.getUser().getId());
+        return ResponseEntity.ok().build();
     }
 
 }

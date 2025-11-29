@@ -1,5 +1,7 @@
 package com.floriano.legato_api.model.Notification;
 
+import com.floriano.legato_api.model.Notification.enums.NotificationTargetType;
+import com.floriano.legato_api.model.Notification.enums.NotificationType;
 import com.floriano.legato_api.model.User.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,8 +27,16 @@ public class Notification {
     @ManyToOne
     private User recipient;
 
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationTargetType targetType;
+
+    private Long targetId;
+
     private String message;
-    private String type;
+
     private boolean read;
     private LocalDateTime createdAt;
 
